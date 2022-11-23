@@ -1,3 +1,5 @@
+import os
+
 import redis
 from flask import render_template
 from rq import Connection, Queue
@@ -10,7 +12,6 @@ from config import Configuration
 
 config = Configuration()
 
-
 @app.route('/classifications', methods=['GET', 'POST'])
 def classifications():
     """API for selecting a model and an image and running a 
@@ -22,5 +23,6 @@ def classifications():
         model_id = form.model.data
         clf_output = classify_image(model_id=model_id,  img_id=image_id)
         result = dict(data=clf_output)
-        return render_template('classification_output.html', results=result, image_id=image_id)
+        return render_template('classification_output.html', results=result, image_id=image_id,
+                               caller_page='classifications', image_folder='imagenet_subset')
     return render_template('classification_select.html', form=form)
