@@ -29,6 +29,7 @@ def classifications():
                              kwargs=dict(model_id=model_id,
                                          img_id=image_id))
             task = q.enqueue_job(job)
+
         return render_template('classification_output_queue.html', image_id=image_id,
                                jobID=task.get_id())
 

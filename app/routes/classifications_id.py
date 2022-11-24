@@ -4,6 +4,8 @@ from rq import Connection, Queue
 from app import app
 from config import Configuration
 
+from .download_results import get_results_json_for_download
+
 config = Configuration()
 
 
@@ -21,4 +23,5 @@ def classifications_id(job_id):
         'task_status': task.get_status(),
         'data': task.result,
     }
+
     return response
