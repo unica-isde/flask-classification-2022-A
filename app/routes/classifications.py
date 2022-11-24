@@ -21,8 +21,25 @@ def classifications():
     if form.validate_on_submit():
         image_id = form.image.data
         model_id = form.model.data
+
+        redis_url = Configuration.REDIS_URL
+        redis_conn = redis.from_url(redis_url)
+        with Connection(redis_conn):
+            q = Queue(name=Configuration.QUEUE)
+            job = Job.create(classify_image, kwargs={
+                "model_id": model_id,
+                "img_id": image_id
+            })
+            task = q.enqueue_job(job)
+
+        # returns the image classification output from the specified model
+        # return render_template('classification_output.html', image_id=image_id, results=result_dict)
+        return render_template("classification_output_queue.html", image_id=image_id, image_folder="imagenet_subset",
+                               caller_page="classifications", jobID=task.get_id())
+
+        """
         clf_output = classify_image(model_id=model_id,  img_id=image_id)
         result = dict(data=clf_output)
         return render_template('classification_output.html', results=result, image_id=image_id,
-                               caller_page='classifications', image_folder='imagenet_subset')
+                               caller_page='classifications', image_folder='imagenet_subset') """
     return render_template('classification_select.html', form=form)

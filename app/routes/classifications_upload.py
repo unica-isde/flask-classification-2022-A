@@ -76,9 +76,25 @@ def classifications_upload():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
             model_id = form.model.data
-            clf_output = classify_image(model_id=model_id,  img_id=image_id)
+
+            redis_url = Configuration.REDIS_URL
+            redis_conn = redis.from_url(redis_url)
+            with Connection(redis_conn):
+                q = Queue(name=Configuration.QUEUE)
+                job = Job.create(classify_image, kwargs={
+                    "model_id": model_id,
+                    "img_id": image_id
+                })
+                task = q.enqueue_job(job)
+
+            # returns the image classification output from the specified model
+            # return render_template('classification_output.html', image_id=image_id, results=result_dict)
+            return render_template("classification_output_queue.html", image_id=image_id, image_folder="uploads",
+                                   caller_page="classifications_upload", jobID=task.get_id())
+
+            """clf_output = classify_image(model_id=model_id,  img_id=image_id)
             result = dict(data=clf_output)
             return render_template('classification_output.html', results=result, image_id=image_id,
-                                   caller_page='classifications_upload', image_folder='uploads')
+                                   caller_page='classifications_upload', image_folder='uploads')"""
 
     return render_template('classification_upload.html', form=form)
