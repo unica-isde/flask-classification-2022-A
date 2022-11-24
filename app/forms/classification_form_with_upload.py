@@ -3,7 +3,6 @@ from flask_wtf.file import FileRequired, FileField
 from wtforms import SubmitField, SelectField
 from wtforms.validators import DataRequired
 
-from app.utils.list_images import list_images
 from config import Configuration
 
 conf = Configuration()

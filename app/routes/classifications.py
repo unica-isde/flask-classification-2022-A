@@ -14,9 +14,11 @@ config = Configuration()
 
 @app.route('/classifications', methods=['GET', 'POST'])
 def classifications():
-    """API for selecting a model and an image and running a 
-    classification job. Returns the output scores from the 
-    model."""
+    """
+    API for selecting a model and an image from the
+    'imagenet_subset' folder and running a classification job.
+    Returns the output scores from the model.
+    """
     form = ClassificationForm()
     if form.validate_on_submit():
         image_id = form.image.data
@@ -32,14 +34,7 @@ def classifications():
             })
             task = q.enqueue_job(job)
 
-        # returns the image classification output from the specified model
-        # return render_template('classification_output.html', image_id=image_id, results=result_dict)
         return render_template("classification_output_queue.html", image_id=image_id, image_folder="imagenet_subset",
                                caller_page="classifications", jobID=task.get_id())
 
-        """
-        clf_output = classify_image(model_id=model_id,  img_id=image_id)
-        result = dict(data=clf_output)
-        return render_template('classification_output.html', results=result, image_id=image_id,
-                               caller_page='classifications', image_folder='imagenet_subset') """
     return render_template('classification_select.html', form=form)
