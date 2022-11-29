@@ -1,4 +1,5 @@
 import base64
+import io
 import os
 
 from PIL import ImageEnhance
@@ -37,7 +38,13 @@ def image_transformation():
         sharpness = form.sharpness.data
         image_output = color_transform(image_id, color)
 
-        image_name = image_save(image_output, image_id)
+        data = io.BytesIO()
+        image_output.save(data, "PNG")
+        encoded_img = base64.b64encode(data.getvalue())
+        decoded_img = encoded_img.decode('utf-8')
+        img_data = f"data:image/jpeg;base64,{decoded_img}"
 
-        return render_template('image_transformation_output.html', image_id=image_name)
+        #image_name = image_save(image_output, image_id)
+
+        return render_template('image_transformation_output.html', img_data=img_data)
     return render_template('image_transformation_select.html', form=form)
