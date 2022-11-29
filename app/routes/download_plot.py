@@ -4,6 +4,8 @@
 # All the functionalities must be preserved, this is just a new feature.
 
 import os
+import time
+
 from app import app
 from config import Configuration
 from matplotlib.pyplot import Figure
@@ -49,6 +51,10 @@ def get_plot_for_download(job_id):
     """
     response = classifications_id(job_id=job_id)
 
+    # error handling: if the response is still none, we do again until we have something
+    while response["data"] is None:
+        response = classifications_id(job_id=job_id)
+
     data = dict(response["data"])
 
     filename = f"temp_figure_{job_id}.png"
@@ -69,6 +75,7 @@ def get_plot_for_download(job_id):
         -------
         Response of the request.
         """
+
         os.remove(path + filename)
         return response
 

@@ -28,6 +28,10 @@ def get_results_json_for_download(job_id):
     # get response
     response = classifications_id(job_id=job_id)
 
+    # error handling: if the response is still none, we do again until we have something
+    while response["data"] is None:
+        response = classifications_id(job_id=job_id)
+
     # cast into json
     js = json.dumps(dict(response["data"]))
 
