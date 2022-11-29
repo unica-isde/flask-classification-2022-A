@@ -1,10 +1,7 @@
 import redis
 from rq import Connection, Queue
-
 from app import app
 from config import Configuration
-
-from .download_results import get_results_json_for_download
 
 config = Configuration()
 

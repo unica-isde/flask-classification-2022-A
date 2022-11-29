@@ -4,12 +4,9 @@
 # All the functionalities must be preserved, this is just a new feature.
 
 import json
-import redis
-from rq import Connection, Queue
-
 from app import app
 from config import Configuration
-
+from app.routes.classifications_id import classifications_id
 from flask import Response
 
 config = Configuration()
@@ -19,21 +16,22 @@ config = Configuration()
 def get_results_json_for_download(job_id):
     """
     Gets the result from redis and returns a json file.
+
+    Parameters
+    ----------
+    job_id: id of the job
+
+    Returns
+    -------
+    The json file as a download, using flask's object Response.
     """
-    redis_url = config.REDIS_URL
-    redis_conn = redis.from_url(redis_url)
-    with Connection(redis_conn):
-        q = Queue(name=Configuration.QUEUE)
-        task = q.fetch_job(job_id)
+    # get response
+    response = classifications_id(job_id=job_id)
 
-    response = {
-        'task_status': task.get_status(),
-        'data': task.result,
-    }
-
-    # convert the response data into json
+    # cast into json
     js = json.dumps(dict(response["data"]))
 
+    # return for download
     return Response(js,
                     mimetype='application/json',
                     headers={f'Content-Disposition': f'attachment;filename=classification_results_job_{job_id}.json'})
