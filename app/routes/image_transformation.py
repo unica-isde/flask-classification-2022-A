@@ -19,8 +19,8 @@ from rq.job import Job
 
 from app import app
 from app.forms.image_transformation_form import ImageTransformationForm
-from ml.image_transformation_utils import color_transform, image_save
-from ml.classification_utils import classify_image
+from ml.image_transformation_utils import color_transform, brightness_transform, contrast_transform, sharpness_transform
+from ml.classification_utils import fetch_image
 from config import Configuration
 
 conf = Configuration()
@@ -32,19 +32,26 @@ def image_transformation():
 
     if form.validate_on_submit():
         image_id = form.image.data
+
+        img_t = fetch_image(image_id)
+
         color = form.color.data
         brightness = form.brightness.data
         contrast = form.contrast.data
         sharpness = form.sharpness.data
-        image_output = color_transform(image_id, color)
+
+        img_t = color_transform(img_t, color)
+        img_t = brightness_transform(img_t, brightness)
+        img_t = contrast_transform(img_t, contrast)
+        img_t = sharpness_transform(img_t, sharpness)
 
         data = io.BytesIO()
-        image_output.save(data, "PNG")
+        img_t.save(data, "PNG")
         encoded_img = base64.b64encode(data.getvalue())
         decoded_img = encoded_img.decode('utf-8')
         img_data = f"data:image/jpeg;base64,{decoded_img}"
 
-        #image_name = image_save(image_output, image_id)
+        # image_name = image_save(img, image_id)
 
-        return render_template('image_transformation_output.html', img_data=img_data)
+        return render_template('image_transformation_output.html', image_id=image_id, img_data=img_data)
     return render_template('image_transformation_select.html', form=form)

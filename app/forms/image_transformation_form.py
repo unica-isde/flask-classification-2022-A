@@ -8,7 +8,7 @@ from app.utils.list_images import list_images
 class ImageTransformationForm(FlaskForm):
     image = SelectField('image', choices=list_images(), validators=[DataRequired()])
     color = FloatField('color', default=1)
-    brightness = FloatField('brightness', default=0)
-    contrast = FloatField('contrast', default=0)
-    sharpness = FloatField('sharpness', default=0)
+    brightness = FloatField('brightness', default=1)
+    contrast = FloatField('contrast', default=1)
+    sharpness = FloatField('sharpness', default=1)
     submit = SubmitField('Submit')

@@ -7,14 +7,42 @@ from config import Configuration
 conf = Configuration()
 
 
-def color_transform(image_id, color):
-    img = fetch_image(image_id)
-
+def color_transform(img, color):
     if not _is_pil_image(img):
         raise TypeError('img should be PIL Image. Got {}'.format(type(img)))
 
     enhancer = ImageEnhance.Color(img)
     img = enhancer.enhance(color)
+
+    return img
+
+
+def brightness_transform(img, brightness):
+    if not _is_pil_image(img):
+        raise TypeError('img should be PIL Image. Got {}'.format(type(img)))
+
+    enhancer = ImageEnhance.Brightness(img)
+    img = enhancer.enhance(brightness)
+
+    return img
+
+
+def contrast_transform(img, contrast):
+    if not _is_pil_image(img):
+        raise TypeError('img should be PIL Image. Got {}'.format(type(img)))
+
+    enhancer = ImageEnhance.Contrast(img)
+    img = enhancer.enhance(contrast)
+
+    return img
+
+
+def sharpness_transform(img, sharpness):
+    if not _is_pil_image(img):
+        raise TypeError('img should be PIL Image. Got {}'.format(type(img)))
+
+    enhancer = ImageEnhance.Sharpness(img)
+    img = enhancer.enhance(sharpness)
 
     return img
 
