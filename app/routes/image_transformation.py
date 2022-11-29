@@ -1,21 +1,6 @@
 import base64
 import io
-import os
-
-from PIL import ImageEnhance
-
-# enhancer = ImageEnhance.Color()
-# enhancer = ImageEnhance.Brightness()
-# enhancer = ImageEnhance.Contrast()
-# enhancer = ImageEnhance.Sharpness()
-
-# factor = 5 / 4.0
-# enhancer.enhance(factor).show(f"Sharpness{factor:f}")
-
-import redis
 from flask import render_template
-from rq import Connection, Queue
-from rq.job import Job
 
 from app import app
 from app.forms.image_transformation_form import ImageTransformationForm
@@ -28,23 +13,28 @@ conf = Configuration()
 
 @app.route('/image_transformation', methods=['GET', 'POST'])
 def image_transformation():
+    """
+    API for selecting an image and modify his property(color, brightness, contrast and sharpness).
+    Returns the original and transformed image.
+    """
     form = ImageTransformationForm()
 
     if form.validate_on_submit():
+        '''Takes the id of the image and the parameters to modify it'''
         image_id = form.image.data
-
-        img_t = fetch_image(image_id)
-
         color = form.color.data
         brightness = form.brightness.data
         contrast = form.contrast.data
         sharpness = form.sharpness.data
 
+        '''Modify the image'''
+        img_t = fetch_image(image_id)
         img_t = color_transform(img_t, color)
         img_t = brightness_transform(img_t, brightness)
         img_t = contrast_transform(img_t, contrast)
         img_t = sharpness_transform(img_t, sharpness)
 
+        '''Convert the image to base64'''
         data = io.BytesIO()
         img_t.save(data, "PNG")
         encoded_img = base64.b64encode(data.getvalue())
