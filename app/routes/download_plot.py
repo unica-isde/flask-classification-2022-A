@@ -13,13 +13,16 @@ import time
 from flask import send_from_directory, after_this_request
 
 config = Configuration()
+
+# path where the temporary file is saved
 path = "/Users/maxrudat/PycharmProjects/flask-classification-2022-A/app/routes/"
 
 
 @app.route('/classifications/<string:job_id>/result_plot', methods=['GET'])
 def get_plot_for_download(job_id):
-    """Returns the status and the result of the job identified
-    by the id specified in the path."""
+    """
+    Connects to redis, gets the results and saves them as a .png file.
+    """
     redis_url = config.REDIS_URL
     redis_conn = redis.from_url(redis_url)
     with Connection(redis_conn):
@@ -44,6 +47,10 @@ def get_plot_for_download(job_id):
 
     @after_this_request
     def delete_img(response):
+        """
+        This removes the image file after the request has been sent.
+        Prohibits taking space from (server) hard-drive.
+        """
         os.remove(path + filename)
         return response
 

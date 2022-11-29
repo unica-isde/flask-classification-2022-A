@@ -17,8 +17,9 @@ config = Configuration()
 
 @app.route('/classifications/<string:job_id>/results', methods=['GET'])
 def get_results_json_for_download(job_id):
-    """Returns the status and the result of the job identified
-    by the id specified in the path."""
+    """
+    Gets the result from redis and returns a json file.
+    """
     redis_url = config.REDIS_URL
     redis_conn = redis.from_url(redis_url)
     with Connection(redis_conn):
@@ -30,6 +31,7 @@ def get_results_json_for_download(job_id):
         'data': task.result,
     }
 
+    # convert the response data into json
     js = json.dumps(dict(response["data"]))
 
     return Response(js,
