@@ -68,12 +68,3 @@ def sharpness_transform(img, sharpness):
     img = enhancer.enhance(sharpness)
 
     return img
-
-
-def image_save(img, img_id):
-    image_name = img_id.replace('.JPEG', '_t.JPEG')
-    image_path = conf.image_folder_path + '/' + image_name
-
-    img.save(image_path, "JPEG")
-
-    return image_name

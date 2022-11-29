@@ -41,7 +41,5 @@ def image_transformation():
         decoded_img = encoded_img.decode('utf-8')
         img_data = f"data:image/jpeg;base64,{decoded_img}"
 
-        # image_name = image_save(img, image_id)
-
         return render_template('image_transformation_output.html', image_id=image_id, img_data=img_data)
     return render_template('image_transformation_select.html', form=form)
