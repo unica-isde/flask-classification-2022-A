@@ -17,9 +17,14 @@ conf = Configuration()
 
 
 def fetch_image(image_id):
-    """Gets the image from the specified ID. It returns only images
-    downloaded in the folder specified in the configuration object."""
+    """Gets the image from the specified ID. As default behaviour it
+    returns only images downloaded in the folder specified in the
+    configuration object.
+    If the default path doesn't exist the image might have been uploaded by the user."""
     image_path = os.path.join(conf.image_folder_path, image_id)
+
+    if not os.path.exists(image_path):
+        image_path = os.path.join(conf.UPLOAD_FOLDER, image_id)
     img = Image.open(image_path)
     return img
 
