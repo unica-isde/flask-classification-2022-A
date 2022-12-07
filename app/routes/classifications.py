@@ -24,17 +24,16 @@ def classifications():
         image_id = form.image.data
         model_id = form.model.data
 
-        redis_url = Configuration.REDIS_URL
-        redis_conn = redis.from_url(redis_url)
-        with Connection(redis_conn):
-            q = Queue(name=Configuration.QUEUE)
-            job = Job.create(classify_image, kwargs={
-                "model_id": model_id,
-                "img_id": image_id
-            })
+        redis_url = config.REDIS_URL
+        redis_connection = redis.from_url(redis_url)
+        with Connection(redis_connection):
+            q = Queue(name=config.QUEUE)
+            job = Job.create(classify_image,
+                             kwargs=dict(model_id=model_id,
+                                         img_id=image_id))
             task = q.enqueue_job(job)
 
-        return render_template("classification_output_queue.html", image_id=image_id, image_folder="imagenet_subset",
-                               caller_page="classifications", jobID=task.get_id())
+        return render_template('classification_output_queue.html', image_id=image_id,
+                               jobID=task.get_id())
 
     return render_template('classification_select.html', form=form)
