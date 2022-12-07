@@ -8,7 +8,7 @@ from werkzeug.utils import secure_filename
 
 from app import app
 from app.forms.classification_form_with_upload import ClassificationFormWithUpload
-#from app.utils.filename_validation import validate_filename
+# from app.utils.filename_validation import validate_filename
 from ml.classification_utils import classify_image
 from config import Configuration
 
@@ -16,6 +16,7 @@ from app.utils import filename_validation as fv
 
 config = Configuration()
 app.config['UPLOAD_FOLDER'] = config.UPLOAD_FOLDER
+
 
 @app.route('/classifications_upload', methods=['GET', 'POST'])
 def classifications_upload():
