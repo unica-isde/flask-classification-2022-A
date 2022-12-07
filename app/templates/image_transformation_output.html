@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <style>
+        .large-front-thumbnail {
+            position: relative;
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .row {
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+
+        h3 {
+            text-align: center;
+        }
+    </style>
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <h3>Original image</h3>
+                <img class="large-front-thumbnail"
+                     src={{ url_for('static', filename='imagenet_subset/'+image_id) }}
+                     alt={{ image_id }}/>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+                <div class="card">
+                    <h3>Transformed image</h3>
+                    <img class="large-front-thumbnail"
+                         src={{ img_data }}
+                         alt={{ image_id }}/>
+                </div>
+            </div>
+    </div>
+{% endblock %}
+
