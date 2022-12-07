@@ -1,6 +1,5 @@
 import redis
 from rq import Connection, Queue
-
 from app import app
 from config import Configuration
 
@@ -11,7 +10,7 @@ config = Configuration()
 def classifications_id(job_id):
     """Returns the status and the result of the job identified
     by the id specified in the path."""
-    redis_url = Configuration.REDIS_URL
+    redis_url = config.REDIS_URL
     redis_conn = redis.from_url(redis_url)
     with Connection(redis_conn):
         q = Queue(name=Configuration.QUEUE)
@@ -21,4 +20,5 @@ def classifications_id(job_id):
         'task_status': task.get_status(),
         'data': task.result,
     }
+
     return response
