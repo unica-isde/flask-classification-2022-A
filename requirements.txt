@@ -8,3 +8,7 @@ rq~=1.11.1
 flask-wtf
 WTForms~=3.0.1
 matplotlib~=3.6.2
+sphinx
+numpydoc
+sphinx_rtd_theme
+scikit-image

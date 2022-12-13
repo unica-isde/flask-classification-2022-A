@@ -7,7 +7,7 @@ import os
 import time
 
 from app import app
-from config import Configuration
+from config import Configuration, project_root
 from matplotlib.pyplot import Figure
 from flask import send_from_directory, after_this_request
 from app.routes.classifications_id import classifications_id
@@ -15,7 +15,7 @@ from app.routes.classifications_id import classifications_id
 config = Configuration()
 
 # path where the temporary file is saved
-path = "/Users/maxrudat/PycharmProjects/flask-classification-2022-A/app/routes/"
+path = project_root + "/app/routes/"
 
 
 def create_plot(data: dict, filename: str):

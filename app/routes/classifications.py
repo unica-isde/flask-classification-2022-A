@@ -13,8 +13,8 @@ config = Configuration()
 
 @app.route('/classifications', methods=['GET', 'POST'])
 def classifications():
-    """API for selecting a model and an image and running a 
-    classification job. Returns the output scores from the 
+    """API for selecting a model and an image and running a
+    classification job. Returns the output scores from the
     model."""
     form = ClassificationForm()
     if form.validate_on_submit():
@@ -30,7 +30,7 @@ def classifications():
                                          img_id=image_id))
             task = q.enqueue_job(job)
 
-        return render_template('classification_output_queue.html', image_id=image_id,
-                               jobID=task.get_id())
+        return render_template("classification_output_queue.html", image_id=image_id, image_folder="imagenet_subset",
+                               caller_page="classifications", jobID=task.get_id())
 
     return render_template('classification_select.html', form=form)
