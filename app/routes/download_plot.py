@@ -25,6 +25,7 @@ def create_plot(data: dict, filename: str):
     Parameters
     ----------
     data: dictionary with keys and values that represent the x and y data.
+
     filename: name of the png file
     """
 
