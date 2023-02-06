@@ -6,7 +6,6 @@ import importlib
 import json
 import logging
 import os
-import time
 import torch
 from PIL import Image
 from torchvision import transforms
@@ -17,9 +16,21 @@ conf = Configuration()
 
 
 def fetch_image(image_id):
-    """Gets the image from the specified ID. It returns only images
-    downloaded in the folder specified in the configuration object."""
+    """Gets the image from the specified ID. As default behaviour it
+    returns only images downloaded in the folder specified in the
+    configuration object.
+    If the default path doesn't exist the image might have been uploaded by the user."""
     image_path = os.path.join(conf.image_folder_path, image_id)
+
+    if not os.path.exists(image_path):
+        intermediate_image_path = os.path.join(conf.UPLOAD_FOLDER, image_id)
+
+        # check if any image with the same name has already been uploaded
+        if os.path.exists(intermediate_image_path):
+            image_path = os.path.join(conf.UPLOAD_FOLDER, image_id, "(1)")
+        else:
+            image_path = os.path.join(conf.UPLOAD_FOLDER, image_id)
+
     img = Image.open(image_path)
     return img
 
@@ -82,5 +93,4 @@ def classify_image(model_id, img_id):
     output = [(labels[idx], percentage[idx].item()) for idx in indices[0][:5]]
 
     img.close()
-    time.sleep(5)
     return output
