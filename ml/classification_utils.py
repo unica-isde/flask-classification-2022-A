@@ -6,7 +6,6 @@ import importlib
 import json
 import logging
 import os
-import time
 import torch
 from PIL import Image
 from torchvision import transforms
@@ -24,7 +23,14 @@ def fetch_image(image_id):
     image_path = os.path.join(conf.image_folder_path, image_id)
 
     if not os.path.exists(image_path):
-        image_path = os.path.join(conf.UPLOAD_FOLDER, image_id)
+        intermediate_image_path = os.path.join(conf.UPLOAD_FOLDER, image_id)
+
+        # check if any image with the same name has already been uploaded
+        if os.path.exists(intermediate_image_path):
+            image_path = os.path.join(conf.UPLOAD_FOLDER, image_id, "(1)")
+        else:
+            image_path = os.path.join(conf.UPLOAD_FOLDER, image_id)
+
     img = Image.open(image_path)
     return img
 

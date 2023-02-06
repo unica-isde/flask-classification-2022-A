@@ -1,11 +1,11 @@
-# Add the “download results” button to the web interface.
-# The button should allow the user to download the results (classification scores) as a JSON file
-# and as a png file showing the top 5 scores in a plot (bar chart).
-# All the functionalities must be preserved, this is just a new feature.
+"""
+This module implements the following functions:
+- Create a plot of the results with pyplot.
+- Provide the plot in a downloadable format as a route.
+"""
+
 
 import os
-import time
-
 from app import app
 from config import Configuration, project_root
 from matplotlib.pyplot import Figure

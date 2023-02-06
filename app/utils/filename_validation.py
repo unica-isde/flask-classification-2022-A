@@ -1,5 +1,5 @@
-
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
 
 def allowed_file(filename):
     """
@@ -17,29 +17,22 @@ def allowed_file(filename):
     it is saved in the "uploads" folder without round brackets and 
     with underscores replacing the blank spaces.
 """
+
+
 def rm_string_spaces(string):
     """
     It replaces every blank space in the string with an underscore.
 
     """
-    list_splits = string.split(" ")
-    new_string = ""
-    for i in range(len(list_splits)):
-        """if list_splits[i] == '(' or list_splits[i] == ')':
-            continue"""
-        if i == len(list_splits) - 1:
-            new_string += list_splits[i]
-        else:
-            new_string += list_splits[i] + '_'
-    return new_string
+    return string.replace(" ", "_")
+
 
 def rm_string_round_brackets(string):
     """
     It removes every round bracket from the filename.
     """
-    new_string = ""
-    list_splits = (new_string.join(string.split('('))).split(')')
-    return new_string.join(list_splits)
+    return string.replace("(", "").replace(")", "")
+
 
 def validate_filename(string):
     """

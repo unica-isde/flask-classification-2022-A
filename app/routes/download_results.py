@@ -1,7 +1,7 @@
-# Add the “download results” button to the web interface.
-# The button should allow the user to download the results (classification scores) as a JSON file
-# and as a png file showing the top 5 scores in a plot (bar chart).
-# All the functionalities must be preserved, this is just a new feature.
+"""
+This module is responsible to be able to download the results in json format.
+It makes the results available through an API.
+"""
 
 import json
 from app import app
